@@ -5,7 +5,7 @@ import { getLatestReleaseVersion } from '../GetLatestReleaseVersion/GetLatestRel
 import { installAndRestart } from '../InstallAndRestart/InstallAndRestart.ts'
 import { shouldUpdate } from '../ShouldUpdate/ShouldUpdate.ts'
 
-interface UpdateResult {
+export interface UpdateResult {
   readonly updated: boolean
   readonly error: any
 }
