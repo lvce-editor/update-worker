@@ -15,7 +15,7 @@ const parseVersionFromUrl = (url: string, repository: string): string => {
   return version
 }
 
-export const getLatestReleaseVersion = async (repository: string) => {
+export const getLatestReleaseVersion = async (repository: string): Promise<string> => {
   try {
     const url = `https://github.com/${repository}/releases/latest`
     const finalUrlResponse = await fetch(url, {
