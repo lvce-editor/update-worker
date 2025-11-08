@@ -1,0 +1,32 @@
+{
+  "name": "@lvce-editor/update-worker-monorepo",
+  "version": "0.0.0-dev",
+  "license": "MIT",
+  "type": "module",
+  "main": "",
+  "scripts": {
+    "build": "node packages/build/src/build.js",
+    "build:static": "node packages/build/src/build-static.js",
+    "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/update-worker/src/updateWorkerMain.ts --outfile=.tmp/dist/dist/updateWorkerMain.js",
+    "dev": "node packages/build/src/dev.js",
+    "format": "prettier --write .",
+    "postinstall": "lerna bootstrap --ci",
+    "lint": "eslint . && prettier --check .",
+    "measure": "cd packages/memory && npm run measure",
+    "test": "lerna run test",
+    "type-check": "tsc -b"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 150
+  },
+  "devDependencies": {
+    "@lerna/legacy-package-management": "^8.2.4",
+    "@lvce-editor/eslint-config": "^2.13.0",
+    "eslint": "^9.39.1",
+    "lerna": "^8.2.3",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  }
+}
