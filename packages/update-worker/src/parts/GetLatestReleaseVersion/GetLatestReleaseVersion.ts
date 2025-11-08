@@ -25,7 +25,7 @@ export const getLatestReleaseVersion = async (repository: string): Promise<Relea
     const finalUrlResponse = await fetch(url, {
       method: 'HEAD',
     })
-    const finalUrl = await finalUrlResponse.text()
+    const finalUrl = finalUrlResponse.url
     const version = parseVersionFromUrl(finalUrl, repository)
     return {
       version,
