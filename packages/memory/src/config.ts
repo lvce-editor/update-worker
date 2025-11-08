@@ -3,7 +3,7 @@ import { root } from './root.ts'
 
 export const threshold = 410_000
 
-export const instantiations = 4000
+export const instantiations = 5000
 
 export const instantiationsPath = join(root, 'packages', 'update-worker')
 
