@@ -7,7 +7,7 @@ const getBaseName = (downloadUrl: string): string => {
 
 export const downloadToDisk = async (downloadUrl: string, response: Response): Promise<string> => {
   // @ts-ignore
-  const cacheDir = await RendererWorker.invoke('PlatformPaths.getCacheDir')
+  const cacheDir = await RendererWorker.invoke('PlatformPaths.getCachePath')
   const baseName = getBaseName(downloadUrl)
   const diskPath = `${cacheDir}/${baseName}`
   const blob = await response.blob()
