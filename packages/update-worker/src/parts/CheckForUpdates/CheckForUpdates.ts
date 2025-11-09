@@ -10,6 +10,7 @@ import { getLatestReleaseVersion } from '../GetLatestReleaseVersion/GetLatestRel
 import { getUpdateUrl } from '../GetUpdateUrl/GetUpdateUrl.ts'
 import { installAndRestart } from '../InstallAndRestart/InstallAndRestart.ts'
 import { isCached } from '../IsCached/IsCached.ts'
+import { isOnline } from '../IsOnline/IsOnline.ts'
 import { shouldUpdate } from '../ShouldUpdate/ShouldUpdate.ts'
 
 export interface UpdateResult {
@@ -19,6 +20,12 @@ export interface UpdateResult {
 
 export const checkForUpdates = async (updateSetting: string, repository: string): Promise<UpdateResult> => {
   try {
+    if (!isOnline()) {
+      return {
+        updated: false,
+        error: undefined,
+      }
+    }
     const bucketName = 'electron-updates'
     const cacheName = 'electron-updates'
     const info = await getLatestReleaseVersion(repository)
