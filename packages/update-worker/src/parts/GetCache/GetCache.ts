@@ -29,7 +29,7 @@ const getCacheInternal = async (bucketName: string, cacheName: string): Promise<
     quota: 1000 * 1024 * 1024, // 1 GB
     expires: Date.now() + twoWeeks,
   })
-  const cache = await bucket.caches.open(cacheName)
+  const cache = (await bucket.caches.open(cacheName)) as Cache
   return cache
 }
 
