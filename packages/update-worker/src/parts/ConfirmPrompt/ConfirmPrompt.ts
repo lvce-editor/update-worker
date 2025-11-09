@@ -1,6 +1,10 @@
-// TODO avoid js prompt in elctron, since it crashes electron
+import { PlatformType } from '@lvce-editor/constants'
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 
 export const confirmPrompt = async (message: string): Promise<boolean> => {
-  // TODO
-  return true
+  const result = await RendererWorker.invoke('ConfirmPrompt.prompt', message, {
+    // @ts-ignore
+    platform: PlatformType.Electron,
+  })
+  return result
 }
