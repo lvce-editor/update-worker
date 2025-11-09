@@ -1,8 +1,5 @@
-import { getCache } from '../GetCache/GetCache.ts'
+import type { ICache } from '../GetCache/GetCache.ts'
 
-export const putInCache = async (url: string, response: Response): Promise<void> => {
-  const bucketName = 'electron-updates'
-  const cacheName = 'electron-updates'
-  const cache = await getCache(bucketName, cacheName)
+export const putInCache = async (url: string, response: Response, cache: ICache): Promise<void> => {
   await cache.put(url, response)
 }
