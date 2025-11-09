@@ -3,7 +3,9 @@ import * as AutoUpdaterStrings from '../AutoUpdaterStrings/AutoUpdaterStrings.ts
 import { confirmPrompt } from '../ConfirmPrompt/ConfirmPrompt.ts'
 import { downloadToDisk } from '../DownloadToDisk/DownloadToDisk.ts'
 import { downloadUpdateToCache } from '../DownloadUpdateToCache/DownloadUpdateToCache.ts'
+import { existsFile } from '../ExistsFile/ExistsFile.ts'
 import { getCache } from '../GetCache/GetCache.ts'
+import { getDiskPath } from '../GetDiskPath/GetDiskPath.ts'
 import { getLatestReleaseVersion } from '../GetLatestReleaseVersion/GetLatestReleaseVersion.ts'
 import { getUpdateUrl } from '../GetUpdateUrl/GetUpdateUrl.ts'
 import { installAndRestart } from '../InstallAndRestart/InstallAndRestart.ts'
@@ -41,7 +43,6 @@ export const checkForUpdates = async (updateSetting: string, repository: string)
       state: 'downloading',
       progress: 0,
     })
-
     if (!(await isCached(downloadUrl, cache))) {
       await downloadUpdateToCache(downloadUrl, cache)
     }
@@ -60,7 +61,11 @@ export const checkForUpdates = async (updateSetting: string, repository: string)
         error: undefined,
       }
     }
-    const diskPath = await downloadToDisk(downloadUrl, response)
+    const diskPath = await getDiskPath(downloadUrl)
+
+    if (!(await existsFile(diskPath))) {
+      await downloadToDisk(downloadUrl, response)
+    }
     await installAndRestart(diskPath)
     return {
       updated: true,
