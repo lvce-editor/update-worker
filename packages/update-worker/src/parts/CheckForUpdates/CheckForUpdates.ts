@@ -1,6 +1,7 @@
 import { RendererWorker } from '@lvce-editor/rpc-registry'
 import * as AutoUpdaterStrings from '../AutoUpdaterStrings/AutoUpdaterStrings.ts'
 import { confirmPrompt } from '../ConfirmPrompt/ConfirmPrompt.ts'
+import { downloadToDisk } from '../DownloadToDisk/DownloadToDisk.ts'
 import { downloadUpdateToCache } from '../DownloadUpdateToCache/DownloadUpdateToCache.ts'
 import { getCache } from '../GetCache/GetCache.ts'
 import { getLatestReleaseVersion } from '../GetLatestReleaseVersion/GetLatestReleaseVersion.ts'
@@ -52,8 +53,15 @@ export const checkForUpdates = async (updateSetting: string, repository: string)
         error: undefined,
       }
     }
-    const downloadPath = '' // TODO get it from cache to disk somehow
-    await installAndRestart(downloadPath)
+    const response = await cache.match(downloadUrl)
+    if (!response) {
+      return {
+        updated: false,
+        error: undefined,
+      }
+    }
+    const diskPath = await downloadToDisk(downloadUrl, response)
+    await installAndRestart(diskPath)
     return {
       updated: true,
       error: undefined,
