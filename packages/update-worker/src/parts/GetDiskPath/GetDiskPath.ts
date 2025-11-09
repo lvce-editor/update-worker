@@ -9,6 +9,6 @@ export const getDiskPath = async (downloadUrl: string): Promise<string> => {
   // @ts-ignore
   const cacheDir = await RendererWorker.invoke('PlatformPaths.getCachePath')
   const baseName = getBaseName(downloadUrl)
-  const diskPath = `${cacheDir}/${baseName}`
+  const diskPath = `${cacheDir}/auto-updater/${baseName}`
   return diskPath
 }
