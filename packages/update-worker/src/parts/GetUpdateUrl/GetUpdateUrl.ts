@@ -1,5 +1,5 @@
-export const getUpdateUrl = (repository: string, version: string): string => {
-  const fileName = `Lvce-Setup-v${version}-x64.exe`
+export const getUpdateUrl = (repository: string, fileNameTemplate: string, version: string): string => {
+  const fileName = fileNameTemplate.replace('${version}', version)
   const url = `https://github.com/${repository}/releases/download/v${version}/${fileName}`
   return url
 }

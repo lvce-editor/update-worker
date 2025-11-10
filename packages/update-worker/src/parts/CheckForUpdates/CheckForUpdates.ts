@@ -6,6 +6,8 @@ export const checkForUpdates = async (updateSetting: string, repository: string)
   const lockName = 'electron-updates'
   const bucketName = 'electron-updates'
   const cacheName = 'electron-updates'
+  const fileNameTemplate = `Lvce-Setup-v\${version}-x64.exe`
+
   const result = await requestLock(lockName, async (lock) => {
     if (!lock) {
       return {
@@ -13,7 +15,7 @@ export const checkForUpdates = async (updateSetting: string, repository: string)
         error: undefined,
       }
     }
-    const result = await doCheckForUpdates(updateSetting, repository, bucketName, cacheName)
+    const result = await doCheckForUpdates(updateSetting, repository, fileNameTemplate, bucketName, cacheName)
     return result
   })
   return result
