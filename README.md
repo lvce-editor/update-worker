@@ -1,6 +1,6 @@
 # Update Worker
 
-Webworker for the menu functionality in LVCE Editor.
+Webworker for the update functionality in LVCE Editor.
 
 ## Contributing
 
