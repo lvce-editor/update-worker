@@ -18,7 +18,13 @@ export interface UpdateResult {
   readonly error: any
 }
 
-export const doCheckForUpdates = async (updateSetting: string, repository: string, bucketName: string, cacheName: string): Promise<UpdateResult> => {
+export const doCheckForUpdates = async (
+  updateSetting: string,
+  repository: string,
+  fileNameTemplate: string,
+  bucketName: string,
+  cacheName: string,
+): Promise<UpdateResult> => {
   try {
     if (!isOnline()) {
       return {
@@ -41,7 +47,7 @@ export const doCheckForUpdates = async (updateSetting: string, repository: strin
         error: undefined,
       }
     }
-    const downloadUrl = getUpdateUrl(repository, info.version)
+    const downloadUrl = getUpdateUrl(repository, fileNameTemplate, info.version)
 
     // @ts-ignore
     await RendererWorker.invoke('Layout.setUpdateState', {
