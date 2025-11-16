@@ -7,8 +7,6 @@
     "e2e:headless": "node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js  --only-extension=. --test-path=. --headless"
   },
   "type": "module",
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "@lvce-editor/test-with-playwright": "^10.6.0"
