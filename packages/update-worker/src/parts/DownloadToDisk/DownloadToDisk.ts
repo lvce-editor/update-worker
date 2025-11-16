@@ -5,7 +5,7 @@ const getParentPath = (path: string): string => {
   if (slashIndex === -1) {
     return ''
   }
-  return path.slice(slashIndex + 1)
+  return path.slice(0, slashIndex)
 }
 
 export const downloadToDisk = async (diskPath: string, response: Response): Promise<void> => {
