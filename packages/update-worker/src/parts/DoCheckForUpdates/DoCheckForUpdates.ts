@@ -75,7 +75,7 @@ export const doCheckForUpdates = async (
     const diskPath = await getDiskPath(downloadUrl)
 
     if (!(await existsFile(diskPath))) {
-      await downloadToDisk(downloadUrl, response)
+      await downloadToDisk(diskPath, response)
     }
     await installAndRestart(diskPath)
     return {
