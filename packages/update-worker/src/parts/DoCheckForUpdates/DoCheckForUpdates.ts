@@ -1,3 +1,4 @@
+import { UpdateState } from '@lvce-editor/constants'
 import { RendererWorker } from '@lvce-editor/rpc-registry'
 import * as AutoUpdaterStrings from '../AutoUpdaterStrings/AutoUpdaterStrings.ts'
 import { confirmPrompt } from '../ConfirmPrompt/ConfirmPrompt.ts'
@@ -51,12 +52,17 @@ export const doCheckForUpdates = async (
 
     // @ts-ignore
     await RendererWorker.invoke('Layout.setUpdateState', {
-      state: 'downloading',
+      state: UpdateState.DownloadingUpdate,
       progress: 0,
     })
     if (!(await isCached(downloadUrl, cache))) {
       await downloadUpdateToCache(downloadUrl, cache)
     }
+    // @ts-ignore
+    await RendererWorker.invoke('Layout.setUpdateState', {
+      state: UpdateState.DownloadedUpdate,
+      progress: 1,
+    })
     const messageRestart = AutoUpdaterStrings.promptRestart()
     const shouldRestart = await confirmPrompt(messageRestart)
     if (!shouldRestart) {
