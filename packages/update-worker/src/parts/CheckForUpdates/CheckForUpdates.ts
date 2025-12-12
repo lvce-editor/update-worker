@@ -11,8 +11,8 @@ export const checkForUpdates = async (updateSetting: string, repository: string)
   const result = await requestLock(lockName, async (lock) => {
     if (!lock) {
       return {
-        updated: false,
         error: undefined,
+        updated: false,
       }
     }
     const result = await doCheckForUpdates(updateSetting, repository, fileNameTemplate, bucketName, cacheName)

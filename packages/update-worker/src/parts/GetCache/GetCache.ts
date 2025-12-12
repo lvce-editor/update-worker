@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 
 export interface ICache {
-  readonly put: (request: RequestInfo | URL, response: Response) => Promise<void>
   readonly match: (request: RequestInfo | URL, options?: CacheQueryOptions) => Promise<Response | undefined>
+  readonly put: (request: RequestInfo | URL, response: Response) => Promise<void>
 }
 
 const cachedCaches: Record<string, Promise<ICache>> = Object.create(null)
@@ -26,8 +26,8 @@ const getCacheInternal = async (bucketName: string, cacheName: string): Promise<
   const twoWeeks = 14 * 24 * 60 * 60 * 1000
   // @ts-ignore
   const bucket = await navigator.storageBuckets.open(bucketName, {
-    quota: 1000 * 1024 * 1024, // 1 GB
     expires: Date.now() + twoWeeks,
+    quota: 1000 * 1024 * 1024, // 1 GB
   })
   const cache = (await bucket.caches.open(cacheName)) as Cache
   return cache

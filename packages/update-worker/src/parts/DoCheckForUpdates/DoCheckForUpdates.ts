@@ -15,8 +15,8 @@ import { isOnline } from '../IsOnline/IsOnline.ts'
 import { shouldUpdate } from '../ShouldUpdate/ShouldUpdate.ts'
 
 export interface UpdateResult {
-  readonly updated: boolean
   readonly error: any
+  readonly updated: boolean
 }
 
 export const doCheckForUpdates = async (
@@ -29,53 +29,53 @@ export const doCheckForUpdates = async (
   try {
     if (!isOnline()) {
       return {
-        updated: false,
         error: undefined,
+        updated: false,
       }
     }
     const info = await getLatestReleaseVersion(repository)
     if (!info || !info.version) {
       return {
-        updated: false,
         error: undefined,
+        updated: false,
       }
     }
     const cache = await getCache(bucketName, cacheName)
 
     if (!(await shouldUpdate(updateSetting, info.version))) {
       return {
-        updated: false,
         error: undefined,
+        updated: false,
       }
     }
     const downloadUrl = getUpdateUrl(repository, fileNameTemplate, info.version)
 
     // @ts-ignore
     await RendererWorker.invoke('Layout.setUpdateState', {
-      state: UpdateState.DownloadingUpdate,
       progress: 0,
+      state: UpdateState.DownloadingUpdate,
     })
     if (!(await isCached(downloadUrl, cache))) {
       await downloadUpdateToCache(downloadUrl, cache)
     }
     // @ts-ignore
     await RendererWorker.invoke('Layout.setUpdateState', {
-      state: UpdateState.DownloadedUpdate,
       progress: 1,
+      state: UpdateState.DownloadedUpdate,
     })
     const messageRestart = AutoUpdaterStrings.promptRestart()
     const shouldRestart = await confirmPrompt(messageRestart)
     if (!shouldRestart) {
       return {
-        updated: false,
         error: undefined,
+        updated: false,
       }
     }
     const response = await cache.match(downloadUrl)
     if (!response) {
       return {
-        updated: false,
         error: undefined,
+        updated: false,
       }
     }
     const diskPath = await getDiskPath(downloadUrl)
@@ -85,14 +85,14 @@ export const doCheckForUpdates = async (
     }
     await installAndRestart(diskPath)
     return {
-      updated: true,
       error: undefined,
+      updated: true,
     }
   } catch (error) {
     console.error(error)
     return {
-      updated: false,
       error: undefined,
+      updated: false,
     }
   }
 }
