@@ -36,12 +36,12 @@ test('putInCache successfully caches response', async () => {
   let putCalled = false
 
   const cache: ICache = {
+    async match() {
+      return undefined
+    },
     async put(requestUrl: RequestInfo | URL) {
       putCalled = true
       expect(requestUrl).toBe(url)
-    },
-    async match() {
-      return undefined
     },
   }
 
@@ -56,11 +56,11 @@ test('putInCache gracefully handles DOMException NetworkError', async () => {
   const networkError = new DOMException('NetworkError: Cache.add() encountered a network error', 'NetworkError')
 
   const cache: ICache = {
-    async put() {
-      throw networkError
-    },
     async match() {
       return undefined
+    },
+    async put() {
+      throw networkError
     },
   }
 
@@ -75,11 +75,11 @@ test('putInCache gracefully handles other errors', async () => {
   const genericError = new Error('Generic cache error')
 
   const cache: ICache = {
-    async put() {
-      throw genericError
-    },
     async match() {
       return undefined
+    },
+    async put() {
+      throw genericError
     },
   }
 
@@ -96,11 +96,11 @@ test('putInCache gracefully handles DOMException NetworkError with different mes
   const networkError = new DOMException('Some network error', 'NetworkError')
 
   const cache: ICache = {
-    async put() {
-      throw networkError
-    },
     async match() {
       return undefined
+    },
+    async put() {
+      throw networkError
     },
   }
 
@@ -115,11 +115,11 @@ test('putInCache gracefully handles DOMException with different name', async () 
   const quotaExceededError = new DOMException('Quota exceeded', 'QuotaExceededError')
 
   const cache: ICache = {
-    async put() {
-      throw quotaExceededError
-    },
     async match() {
       return undefined
+    },
+    async put() {
+      throw quotaExceededError
     },
   }
 
