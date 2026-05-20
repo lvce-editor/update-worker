@@ -1,11 +1,11 @@
 import { VError } from '@lvce-editor/verror'
 import * as Exec from '../Exec/Exec.ts'
 import * as FirstNodeWorkerEventType from '../FirstNodeWorkerEventType/FirstNodeWorkerEventType.ts'
-import { getNsisUpdateArgs } from '../GetNsisUpdateArgs/GetNsisUpdateArgs.ts'
+import { getNSISUpdateArgs } from '../GetNsisUpdateArgs/GetNsisUpdateArgs.ts'
 
 export const installAndRestart = async (downloadPath: string): Promise<void> => {
   try {
-    const args = getNsisUpdateArgs()
+    const args = getNSISUpdateArgs()
     const { event, type } = await Exec.exec(downloadPath, args, {
       detached: true,
       stdio: 'inherit',
@@ -14,6 +14,6 @@ export const installAndRestart = async (downloadPath: string): Promise<void> => 
       throw new Error(`Child process error: ${event}`)
     }
   } catch (error) {
-    throw new VError(error, `Failed to install nsis update`)
+    throw new VError(error, `Failed to install NSIS update`)
   }
 }
