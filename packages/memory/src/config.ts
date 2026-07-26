@@ -9,4 +9,4 @@ export const instantiationsPath = join(root, 'packages', 'update-worker')
 
 export const workerPath = join(root, '.tmp/dist/dist/updateWorkerMain.js')
 
-export const playwrightPath = import.meta.resolve('../../e2e/node_modules/playwright/index.mjs').toString()
+export const playwrightPath = import.meta.resolve('../../../node_modules/playwright/index.mjs').toString()

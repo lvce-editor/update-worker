@@ -3,16 +3,18 @@
   "version": "0.0.0-dev",
   "license": "MIT",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
     "build:watch": "node packages/build/src/build-watch.js",
     "dev": "node packages/build/src/dev.js",
     "format": "prettier --write .",
-    "postinstall": "lerna bootstrap --ci",
     "lint": "eslint . && prettier --check .",
     "measure": "cd packages/memory && npm run measure",
-    "test": "lerna run test",
+    "test": "npm test --workspaces --if-present",
     "type-check": "tsc -b"
   },
   "prettier": {
@@ -21,10 +23,8 @@
     "printWidth": 150
   },
   "devDependencies": {
-    "@lerna/legacy-package-management": "^8.2.4",
     "@lvce-editor/eslint-config": "^17.5.0",
     "eslint": "^10.8.0",
-    "lerna": "^8.2.3",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3"
   }
