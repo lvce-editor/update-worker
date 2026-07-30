@@ -1,0 +1,27 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "project": ["*.js"]
+    },
+    "packages/build": {
+      "project": ["src/**/*.js"],
+      "ignoreDependencies": ["@lvce-editor/verror", "esbuild"]
+    },
+    "packages/e2e": {
+      "entry": ["src/**/*.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/memory": {
+      "project": ["src/**/*.ts"],
+      "ignoreDependencies": ["playwright"]
+    },
+    "packages/server": {
+      "project": ["src/**/*.js"]
+    },
+    "packages/update-worker": {
+      "entry": ["src/updateWorkerMain.ts", "test/**/*.test.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"]
+    }
+  }
+}
