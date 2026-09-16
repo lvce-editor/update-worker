@@ -7,7 +7,7 @@ import { downloadUpdateToCache } from '../DownloadUpdateToCache/DownloadUpdateTo
 import { existsFile } from '../ExistsFile/ExistsFile.ts'
 import { getCache } from '../GetCache/GetCache.ts'
 import { getDiskPath } from '../GetDiskPath/GetDiskPath.ts'
-import { getLatestReleaseVersion } from '../GetLatestReleaseVersion/GetLatestReleaseVersion.ts'
+import { getLatestVersion } from '../GetLatestVersion/GetLatestVersion.ts'
 import { getUpdateUrl } from '../GetUpdateUrl/GetUpdateUrl.ts'
 import { installAndRestart } from '../InstallAndRestart/InstallAndRestart.ts'
 import { isCached } from '../IsCached/IsCached.ts'
@@ -33,7 +33,7 @@ export const doCheckForUpdates = async (
         updated: false,
       }
     }
-    const info = await getLatestReleaseVersion(repository)
+    const info = await getLatestVersion(repository)
     if (!info || !info.version) {
       return {
         error: undefined,
