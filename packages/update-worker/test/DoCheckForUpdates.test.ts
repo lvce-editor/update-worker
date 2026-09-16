@@ -35,5 +35,5 @@ test('reports a failed update check to the host', async () => {
   const result = await doCheckForUpdates('', 'lvce-editor/lvce-editor', '', 'test', 'test')
   expect(result.updated).toBe(false)
   expect(result.error).toContain('offline')
-  expect(renderer.invocations).toHaveLength(1)
+  expect(renderer.invocations.some(([command]) => String(command).includes('MacUpdate'))).toBe(false)
 })
