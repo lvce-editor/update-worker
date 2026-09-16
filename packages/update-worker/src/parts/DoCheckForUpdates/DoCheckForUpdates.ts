@@ -10,6 +10,7 @@ import { getDiskPath } from '../GetDiskPath/GetDiskPath.ts'
 import { getLatestVersion } from '../GetLatestVersion/GetLatestVersion.ts'
 import { getUpdateUrl } from '../GetUpdateUrl/GetUpdateUrl.ts'
 import { installAndRestart } from '../InstallAndRestart/InstallAndRestart.ts'
+import { installMacUpdate } from '../InstallMacUpdate/InstallMacUpdate.ts'
 import { isCached } from '../IsCached/IsCached.ts'
 import { isOnline } from '../IsOnline/IsOnline.ts'
 import { shouldUpdate } from '../ShouldUpdate/ShouldUpdate.ts'
@@ -39,6 +40,11 @@ export const doCheckForUpdates = async (
         error: undefined,
         updated: false,
       }
+    }
+    // @ts-ignore
+    const platform = await RendererWorker.invoke('AutoUpdater.getPlatform')
+    if (platform === 'darwin') {
+      return await installMacUpdate(info.version)
     }
     const cache = await getCache(bucketName, cacheName)
 
@@ -91,7 +97,7 @@ export const doCheckForUpdates = async (
   } catch (error) {
     console.error(error)
     return {
-      error: undefined,
+      error: error instanceof Error ? error.message : String(error),
       updated: false,
     }
   }
