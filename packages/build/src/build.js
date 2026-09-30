@@ -53,6 +53,7 @@ await rm(dist, { recursive: true, force: true })
 await mkdir(dist, { recursive: true })
 
 await bundleJs()
+await cp(join(root, 'node_modules', '@lvce-editor', 'cache-worker', 'cacheWorkerMain.js'), join(dist, 'dist', 'cacheWorkerMain.js'))
 
 const version = await getVersion()
 
