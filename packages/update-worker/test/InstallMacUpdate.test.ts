@@ -24,7 +24,7 @@ test('downloads and stages before offering restart', async () => {
     },
     'Layout.setUpdateProgress': () => {},
     'Notification.create': () => {},
-    'Preferences.get': () => true,
+    'Preferences.get': () => undefined,
     'Process.getArch': () => 'arm64',
   })
   using dialog = DialogWorker.registerMockRpc({
@@ -37,6 +37,8 @@ test('downloads and stages before offering restart', async () => {
   expect(events).toEqual(['Install Update', 'download', 'stage', 'Restart', 'restart'])
   expect(downloadMacUpdate).toHaveBeenCalledWith('0.115.15', 'arm64', expect.any(Function))
   expect(renderer.invocations).toContainEqual(['AutoUpdater.stageMacUpdate', 'file:///cache/update.dmg', '0.115.15'])
+  expect(renderer.invocations).toContainEqual(['Layout.setUpdateProgress', 0])
+  expect(renderer.invocations).toContainEqual(['Layout.setUpdateProgress', null])
   expect(dialog.invocations).toHaveLength(2)
 })
 
