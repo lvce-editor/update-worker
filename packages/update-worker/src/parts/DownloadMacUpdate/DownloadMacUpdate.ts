@@ -8,7 +8,11 @@ interface ReleaseAsset {
   readonly size: number
 }
 
-export const downloadMacUpdate = async (version: string, arch: string): Promise<string> => {
+export const downloadMacUpdate = async (
+  version: string,
+  arch: string,
+  onProgress?: (receivedBytes: number, totalBytes?: number) => void,
+): Promise<string> => {
   if (!/^\d+\.\d+\.\d+$/.test(version) || !['arm64', 'x64'].includes(arch)) {
     throw new Error('Invalid macOS update version or architecture')
   }
@@ -35,6 +39,15 @@ export const downloadMacUpdate = async (version: string, arch: string): Promise<
   const reader = response.body.getReader()
   const chunks: ArrayBuffer[] = []
   let size = 0
+  let lastProgressAt = 0
+  const reportProgress = (receivedBytes: number): void => {
+    const now = Date.now()
+    if (receivedBytes === 0 || receivedBytes >= asset.size || now - lastProgressAt >= 100) {
+      lastProgressAt = now
+      onProgress?.(receivedBytes, asset.size)
+    }
+  }
+  reportProgress(0)
   try {
     while (true) {
       const { done, value } = await reader.read()
@@ -46,6 +59,7 @@ export const downloadMacUpdate = async (version: string, arch: string): Promise<
         throw new Error('Update download exceeds the expected size')
       }
       chunks.push(new Uint8Array(value).buffer)
+      reportProgress(size)
     }
   } finally {
     await reader.cancel()

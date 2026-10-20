@@ -15,7 +15,33 @@ export const installMacUpdate = async (version: string, download: typeof downloa
   await RendererWorker.invoke('Notification.create', 'info', `Preparing update ${version}...`)
   // @ts-ignore
   const arch = await RendererWorker.invoke('Process.getArch')
-  const diskPath = await download(version, arch)
+  // @ts-ignore
+  const showProgress = (await RendererWorker.invoke('Preferences.get', 'update.showProgress')) !== false
+  const sendProgress = async (progress: number | null | undefined): Promise<void> => {
+    try {
+      // @ts-ignore
+      await RendererWorker.invoke('Layout.setUpdateProgress', progress)
+    } catch {
+      // A status bar rendering failure must not interrupt an update download.
+    }
+  }
+  if (showProgress) {
+    await sendProgress(0)
+  }
+  let diskPath: string
+  try {
+    diskPath = await download(version, arch, (receivedBytes, totalBytes) => {
+      if (!showProgress) {
+        return
+      }
+      const progress = totalBytes && totalBytes > 0 ? receivedBytes / totalBytes : undefined
+      void sendProgress(progress)
+    })
+  } finally {
+    if (showProgress) {
+      await sendProgress(null)
+    }
+  }
   // @ts-ignore
   await RendererWorker.invoke('AutoUpdater.stageMacUpdate', diskPath, version)
   const restart = await DialogWorker.invoke('ConfirmPrompt.prompt', `Update ${version} is ready. Restart to finish installing?`, {
