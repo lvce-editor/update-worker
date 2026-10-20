@@ -28,6 +28,11 @@ export const installMacUpdate = async (version: string, download: typeof downloa
   if (showProgress) {
     await sendProgress(0)
   }
+  let progressUpdatePromise = Promise.resolve()
+  const queueProgress = async (progress: number | undefined): Promise<void> => {
+    await progressUpdatePromise
+    await sendProgress(progress)
+  }
   let diskPath: string
   try {
     diskPath = await download(version, arch, (receivedBytes, totalBytes) => {
@@ -35,10 +40,11 @@ export const installMacUpdate = async (version: string, download: typeof downloa
         return
       }
       const progress = totalBytes && totalBytes > 0 ? receivedBytes / totalBytes : undefined
-      void sendProgress(progress)
+      progressUpdatePromise = queueProgress(progress)
     })
   } finally {
     if (showProgress) {
+      await progressUpdatePromise
       await sendProgress(null)
     }
   }

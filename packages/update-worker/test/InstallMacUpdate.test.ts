@@ -1,7 +1,8 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 import { DialogWorker, RendererWorker } from '@lvce-editor/rpc-registry'
 
-const downloadMacUpdate = jest.fn<(version: string, arch: string, onProgress?: (receivedBytes: number, totalBytes?: number) => void) => Promise<string>>()
+const downloadMacUpdate =
+  jest.fn<(version: string, arch: string, onProgress?: (receivedBytes: number, totalBytes?: number) => void) => Promise<string>>()
 import { installMacUpdate } from '../src/parts/InstallMacUpdate/InstallMacUpdate.ts'
 
 beforeEach(() => {
@@ -21,10 +22,10 @@ test('downloads and stages before offering restart', async () => {
     'AutoUpdater.stageMacUpdate': () => {
       events.push('stage')
     },
-    'Notification.create': () => {},
-    'Process.getArch': () => 'arm64',
-    'Preferences.get': () => true,
     'Layout.setUpdateProgress': () => {},
+    'Notification.create': () => {},
+    'Preferences.get': () => true,
+    'Process.getArch': () => 'arm64',
   })
   using dialog = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt': (_message: string, options: { readonly confirmMessage: string }) => {
@@ -71,10 +72,10 @@ test('reports the measured download fraction and removes the item when downloadi
     throw new Error('download failed')
   })
   using renderer = RendererWorker.registerMockRpc({
+    'Layout.setUpdateProgress': () => {},
     'Notification.create': () => {},
     'Preferences.get': () => true,
     'Process.getArch': () => 'arm64',
-    'Layout.setUpdateProgress': () => {},
   })
   using dialog = DialogWorker.registerMockRpc({ 'ConfirmPrompt.prompt': () => true })
   await expect(installMacUpdate('0.115.15', downloadMacUpdate)).rejects.toThrow('download failed')
@@ -89,10 +90,10 @@ test('a failed native install does not offer restart', async () => {
     'AutoUpdater.stageMacUpdate': () => {
       throw new Error('invalid bundle')
     },
-    'Notification.create': () => {},
-    'Process.getArch': () => 'arm64',
-    'Preferences.get': () => true,
     'Layout.setUpdateProgress': () => {},
+    'Notification.create': () => {},
+    'Preferences.get': () => true,
+    'Process.getArch': () => 'arm64',
   })
   using dialog = DialogWorker.registerMockRpc({ 'ConfirmPrompt.prompt': () => true })
   await expect(installMacUpdate('0.115.15', downloadMacUpdate)).rejects.toThrow('invalid bundle')
@@ -104,9 +105,9 @@ test('Later keeps the staged update without restarting', async () => {
   downloadMacUpdate.mockResolvedValue('file:///cache/update.dmg')
   using renderer = RendererWorker.registerMockRpc({
     'AutoUpdater.stageMacUpdate': () => {},
+    'Layout.setUpdateProgress': () => {},
     'Notification.create': () => {},
     'Preferences.get': () => true,
-    'Layout.setUpdateProgress': () => {},
     'Process.getArch': () => 'arm64',
   })
   using dialog = DialogWorker.registerMockRpc({

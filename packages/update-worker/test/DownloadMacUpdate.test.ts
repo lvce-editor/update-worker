@@ -40,8 +40,13 @@ test('reports received bytes against the trusted release asset size', async () =
     'FileSystem.writeBlob': () => {},
     'PlatformPaths.getCacheUri': () => 'file:///cache',
   })
-  await downloadMacUpdate('0.115.15', 'arm64', (receivedBytes, totalBytes) => progress.push([receivedBytes, totalBytes]))
-  expect(progress).toEqual([[0, bytes.byteLength], [bytes.byteLength, bytes.byteLength]])
+  await downloadMacUpdate('0.115.15', 'arm64', (receivedBytes, totalBytes) => {
+    progress.push([receivedBytes, totalBytes])
+  })
+  expect(progress).toEqual([
+    [0, bytes.byteLength],
+    [bytes.byteLength, bytes.byteLength],
+  ])
 })
 
 test('rejects checksum mismatch before writing or installing', async () => {
