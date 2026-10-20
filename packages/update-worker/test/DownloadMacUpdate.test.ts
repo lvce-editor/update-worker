@@ -32,6 +32,23 @@ test('downloads the architecture-specific DMG, checks its digest and writes it t
   expect(rpc.invocations[2][0]).toBe('FileSystem.writeBlob')
 })
 
+test('reports received bytes against the trusted release asset size', async () => {
+  const progress: Array<[number, number | undefined]> = []
+  mockFetch()
+  using _rpc = RendererWorker.registerMockRpc({
+    'FileSystem.mkdir': () => {},
+    'FileSystem.writeBlob': () => {},
+    'PlatformPaths.getCacheUri': () => 'file:///cache',
+  })
+  await downloadMacUpdate('0.115.15', 'arm64', (receivedBytes, totalBytes) => {
+    progress.push([receivedBytes, totalBytes])
+  })
+  expect(progress).toEqual([
+    [0, bytes.byteLength],
+    [bytes.byteLength, bytes.byteLength],
+  ])
+})
+
 test('rejects checksum mismatch before writing or installing', async () => {
   mockFetch(`sha256:${'0'.repeat(64)}`)
   using rpc = RendererWorker.registerMockRpc({})
